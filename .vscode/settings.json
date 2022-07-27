@@ -1,0 +1,8 @@
+{
+    "css.customData": [".vscode/css_custom_data.json"],
+    "files.exclude": {
+        "node_modules": true,
+        ".next": true
+    },
+    "editor.wordWrap": "on"
+}
