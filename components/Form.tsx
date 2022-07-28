@@ -4,7 +4,7 @@ import { useDebounce } from 'utils';
 import { useState } from 'react';
 
 export const SearchField = ({ onChange }: { onChange: Function }) => {
-    const inputHandler = useDebounce<React.ChangeEvent<HTMLInputElement>> (
+    const inputHandler = useDebounce<React.ChangeEvent<HTMLInputElement>>(
         (e) => onChange(e.target.value),
         400
     );
@@ -17,9 +17,13 @@ export const SearchField = ({ onChange }: { onChange: Function }) => {
                 size="small"
                 onChange={inputHandler}
                 inputProps={{
+                    autoComplete: 'off',
                     style: {
                         paddingLeft: 40,
                         borderRadius: '50px'
+                    },
+                    form: {
+                        autoComplete: 'off',
                     }
                 }}
             />
@@ -28,10 +32,10 @@ export const SearchField = ({ onChange }: { onChange: Function }) => {
     )
 }
 
-export const ToggleButton = ({onChange}: {onChange: Function}) => {
+export const ToggleButton = ({ onChange }: { onChange: Function }) => {
     const [toggle, setToggle] = useState(false)
 
-    const handleToggle = ()=> {
+    const handleToggle = () => {
         setToggle(!toggle)
         onChange()
     }
@@ -39,7 +43,7 @@ export const ToggleButton = ({onChange}: {onChange: Function}) => {
     return (
         <label htmlFor="toggleThree" className="flex items-center cursor-pointer select-none" onClick={handleToggle}>
             <div className="relative">
-                <div className={`block w-14 h-8 rounded-full ${toggle ? 'bg-green-400' : 'bg-[#E5E7EB]'}`} />
+                <div className={`block w-full sm:w-14 h-8 rounded-full ${toggle ? 'bg-green-400' : 'bg-[#E5E7EB]'}`} />
                 <div className={`absolute top-1 w-6 h-6 rounded-full transition duration-300 flex items-center justify-center bg-white ${toggle ? 'right-1' : 'left-1 '}`}>
                     <span className={!toggle ? 'hidden' : ''}>
                         <svg className="w-4 h-4 stroke-current" viewBox="0 0 11 8" fill="#000" xmlns="http://www.w3.org/2000/svg">
@@ -57,7 +61,7 @@ export const ToggleButton = ({onChange}: {onChange: Function}) => {
     )
 }
 
-export const RadioGender = ({onChange}:{onChange: Function}) => {
+export const RadioGender = ({ onChange }: { onChange: Function }) => {
     return (
         <RadioGroup row onChange={event => onChange(event.target.value)} defaultValue="all">
             <FormControlLabel value="all" control={<Radio />} label="All" />

@@ -1,4 +1,5 @@
 import { Pagination } from '@mui/material';
+import { useWindowSize } from 'customHooks';
 import { Filter, Gender, User } from 'interfaces';
 import React, { useEffect, useState } from 'react'
 import { getUserList } from 'requests/user';
@@ -8,6 +9,7 @@ import UserCard from './UserCard';
 
 const UserList = () => {
     const toShow = 10;
+    const { isTab } = useWindowSize();
     const [users, setUsers] = useState<User[]>([]);
     const [totalData, setTotalData] = useState<number>(0);
     const [filteredData, setFilteredData] = useState<User[]>([])
@@ -73,32 +75,35 @@ const UserList = () => {
         <section className='container py-12'>
             <h4 className='text-24 font-medium mb-8'>User List</h4>
 
-            <div className='grid grid-cols-4 gap-4 mb-4'>
-                <div>
+            <div className='flex flex-wrap sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4'>
+                <div className='w-full'>
                     <SearchField onChange={(value: string) => setFilters({ ...filters, key: value })} />
                 </div>
-                <div className='col-span-2'>
-                    <div className='flex items-center justify-center'>
+                <div className='lg:col-span-2'>
+                    <div className='flex flex-wrap items-center sm:justify-center'>
                         <label className='mr-3 mb-1'>Filter By:</label>
                         <RadioGender onChange={(value: Gender) => setFilters({ ...filters, gender: value })} />
                     </div>
                 </div>
                 <div>
-                    <div className="flex justify-end items-center">
-                        <span className='mr-3'>Tile View</span>
-                        <ToggleButton onChange={() => setTileView(!tileView)} />
-                    </div>
+                    {!isTab ?
+                        <div className="flex justify-end items-center">
+                            <span className='mr-3'>Tile View</span>
+                            <ToggleButton onChange={() => setTileView(!tileView)} />
+                        </div>
+                        : <></>
+                    }
                 </div>
             </div>
 
-            {tileView ?
-                <div className="grid grid-cols-4 gap-6">
+            {(!tileView && !isTab) ?
+                <DataTable className='mb-4' data={filteredData} pageSize={toShow} />
+                :
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-4">
                     {filteredData.map((user, i) =>
                         <UserCard user={user} key={i} />
                     )}
                 </div>
-                :
-                <DataTable className='mb-4' data={filteredData} pageSize={toShow} />
             }
 
             <Pagination count={Math.ceil(totalData / toShow)} shape="rounded" className='flex justify-end' onChange={handlePagination} />
